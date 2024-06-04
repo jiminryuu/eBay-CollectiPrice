@@ -56,7 +56,7 @@ def etl() :
             new_data = product.get_data() # get the new data
             new_collection.insert_one(new_data) #insert new data
 
-        new_cursor = new_collection.find({}, {'_id': 0}) 
+        new_cursor = new_collection.find({}, {'_id': 0})  # get the new scraped data and output to xlsx.
         df = pd.DataFrame(list(new_cursor))
         df.to_excel(collection_name + ".xlsx", index = False)
 
@@ -65,7 +65,7 @@ def etl() :
 
         server_info = db.command('serverStatus')  # Execute a serverStatus command
         print(server_info)
-        client.close()
+        client.close() #close connection
         print("MongoDB is running.")
     except errors.ServerSelectionTimeoutError as e:
         print("MongoDB is not running.")
@@ -76,6 +76,8 @@ def is_mongo_running() -> bool:
         # Check if MongoDB port is in use (default port is 27017)
         return s.connect_ex(('localhost', 27017)) == 0
 
+
+#try to start running the mongoDB, and keeo retrying
 def run_mongo() -> subprocess:
 
     attempt = 0
